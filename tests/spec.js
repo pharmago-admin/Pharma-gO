@@ -258,7 +258,7 @@ globalThis.runTests = function runTests() {
     ok(!denied.success, 'admin action needs the admin key');
 
     const approved = call({
-      action: 'update_status', adminKey: 'changeme-admin-key', rxId: up.data.rxId,
+      action: 'update_status', adminKey: ADMIN_KEY, rxId: up.data.rxId,
       status: 'APPROVED', note: 'looks valid',
     });
     ok(approved.success, 'admin can approve', approved.message);
@@ -278,7 +278,7 @@ globalThis.runTests = function runTests() {
       'approved file renamed to UserID__UploadTime', H.folder('Approved Rx').fileNames()[0]);
 
     const rereview = call({
-      action: 'update_status', adminKey: 'changeme-admin-key', rxId: up.data.rxId, status: 'DECLINED',
+      action: 'update_status', adminKey: ADMIN_KEY, rxId: up.data.rxId, status: 'DECLINED',
     });
     ok(!rereview.success, 'already reviewed prescription cannot be re-reviewed');
 
@@ -288,7 +288,7 @@ globalThis.runTests = function runTests() {
       fileType: 'application/pdf', fileBase64: content,
     });
     ok(call({
-      action: 'update_status', adminKey: 'changeme-admin-key', rxId: up2.data.rxId,
+      action: 'update_status', adminKey: ADMIN_KEY, rxId: up2.data.rxId,
       status: 'DECLINED', note: 'unreadable',
     }).success, 'admin can decline');
     ok(H.folder('Declined Rx').fileNames().length === 1, 'declined file moved to Declined folder',
@@ -313,7 +313,7 @@ globalThis.runTests = function runTests() {
     const rb = call({ action: 'get_data', sheetName: 'Prescriptions', userId: b.userId, sessionToken: b.sessionToken });
     eq(rb.data.length, 1, 'user B sees only their 1 prescription');
 
-    const adminAll = call({ action: 'get_data', sheetName: 'Prescriptions', adminKey: 'changeme-admin-key' });
+    const adminAll = call({ action: 'get_data', sheetName: 'Prescriptions', adminKey: ADMIN_KEY });
     ok(adminAll.success && adminAll.data.length === 3, 'admin key can list all prescriptions',
       adminAll.message);
   });
@@ -344,17 +344,17 @@ globalThis.runTests = function runTests() {
     const badKey = call({ action: 'view_rx', rxId: up.data.rxId, adminKey: 'nope' });
     ok(!badKey.success, 'wrong admin key cannot view someone else\'s file');
 
-    const admin = call({ action: 'view_rx', rxId: up.data.rxId, adminKey: 'changeme-admin-key' });
+    const admin = call({ action: 'view_rx', rxId: up.data.rxId, adminKey: ADMIN_KEY });
     ok(admin.success, 'admin can view the prescription', admin.message);
     eq(admin.data.fileBase64, content, 'admin receives the same file bytes');
 
-    ok(call({ action: 'update_status', adminKey: 'changeme-admin-key', rxId: up.data.rxId, status: 'APPROVED' }).success,
+    ok(call({ action: 'update_status', adminKey: ADMIN_KEY, rxId: up.data.rxId, status: 'APPROVED' }).success,
       'approve before a second view');
     const after = call({ action: 'view_rx', rxId: up.data.rxId, userId: owner.userId, sessionToken: owner.sessionToken });
     ok(after.success && after.data.fileBase64 === content, 'file remains viewable after approval');
     eq(after.data.status, 'APPROVED', 'viewer reflects the reviewed status');
 
-    ok(!call({ action: 'view_rx', rxId: 'missing', adminKey: 'changeme-admin-key' }).success,
+    ok(!call({ action: 'view_rx', rxId: 'missing', adminKey: ADMIN_KEY }).success,
       'unknown prescription cannot be viewed');
   });
 
@@ -370,9 +370,9 @@ globalThis.runTests = function runTests() {
     const rx = call({ action: 'get_data', sheetName: 'Prescriptions' });
     ok(!rx.success, 'all-prescriptions list blocked without admin key or userId');
 
-    ok(call({ action: 'get_data', sheetName: 'Users', adminKey: 'changeme-admin-key' }).success,
+    ok(call({ action: 'get_data', sheetName: 'Users', adminKey: ADMIN_KEY }).success,
       'Users list allowed with admin key');
-    const exposed = call({ action: 'get_data', sheetName: 'Users', adminKey: 'changeme-admin-key' });
+    const exposed = call({ action: 'get_data', sheetName: 'Users', adminKey: ADMIN_KEY });
     ok(exposed.data.every((u) => u.Password === undefined), 'password hashes are never returned');
     ok(/s1@example\.com/.test(JSON.stringify(exposed.data)), 'admin list contains the user');
   });
@@ -433,7 +433,7 @@ globalThis.runTests = function runTests() {
     // admin approval
     const noKey = call({ action: 'review_merchant', adminKey: 'nope', merchantId: mid, status: 'APPROVED' });
     ok(!noKey.success, 'review_merchant needs the admin key');
-    ok(call({ action: 'review_merchant', adminKey: 'changeme-admin-key', merchantId: mid, status: 'APPROVED' }).success,
+    ok(call({ action: 'review_merchant', adminKey: ADMIN_KEY, merchantId: mid, status: 'APPROVED' }).success,
       'admin can approve the vendor');
     eq(H.findRow('Merchants', 0, mid)[8], 'APPROVED', 'Merchants status APPROVED');
     eq(H.findRow('Users', 0, mid)[6], 'ACTIVE', 'vendor login status ACTIVE after approval');
@@ -468,7 +468,7 @@ globalThis.runTests = function runTests() {
     ok(!early.success && /approved/i.test(early.message),
       'unapproved vendor cannot list medicines', early.message);
 
-    call({ action: 'review_merchant', adminKey: 'changeme-admin-key', merchantId: mid, status: 'APPROVED' });
+    call({ action: 'review_merchant', adminKey: ADMIN_KEY, merchantId: mid, status: 'APPROVED' });
     call({ action: 'forgot_password', loginId: mid });
     call({ action: 'reset_password', token: H.lastResetToken('m@example.com'), password: 'vendorpw1' });
 
@@ -481,7 +481,7 @@ globalThis.runTests = function runTests() {
     ok(!wrongPw.success, 'wrong vendor password rejected');
 
     const adminAdd = call({
-      action: 'add_medicine', adminKey: 'changeme-admin-key', name: 'Aspirin', price: 20, stock: 5,
+      action: 'add_medicine', adminKey: ADMIN_KEY, name: 'Aspirin', price: 20, stock: 5,
     });
     ok(adminAdd.success, 'admin can add a medicine', adminAdd.message);
 
@@ -491,7 +491,7 @@ globalThis.runTests = function runTests() {
     eq(cat.data[0].Name, 'Crocin', 'medicine fields returned');
 
     // deactivate -> hidden from catalogue
-    call({ action: 'update_medicine', adminKey: 'changeme-admin-key', medId: adminAdd.data.medId, active: false });
+    call({ action: 'update_medicine', adminKey: ADMIN_KEY, medId: adminAdd.data.medId, active: false });
     eq(call({ action: 'get_medicines' }).data.length, 1, 'inactive medicine hidden from catalogue');
 
     // vendor only sees/edits their own
@@ -523,7 +523,7 @@ globalThis.runTests = function runTests() {
       shopName: 'Bad Store', documents: docs,
     }).data.merchantId;
     call({ action: 'verify_merchant', merchantId: mid, otp: H.lastOtp('d@example.com') });
-    call({ action: 'review_merchant', adminKey: 'changeme-admin-key', merchantId: mid, status: 'DECLINED' });
+    call({ action: 'review_merchant', adminKey: ADMIN_KEY, merchantId: mid, status: 'DECLINED' });
     eq(H.findRow('Users', 0, mid)[6], 'DECLINED', 'declined vendor status mirrored to Users');
     const l = call({ action: 'login', loginId: mid, password: 'x' });
     ok(!l.success && /declined/i.test(l.message), 'declined vendor blocked at login', l.message);
@@ -550,7 +550,7 @@ globalThis.runTests = function runTests() {
     boot();
     const ids = [];
     for (let i = 0; i < 25; i++) {
-      ids.push(call({ action: 'add_medicine', adminKey: 'changeme-admin-key', name: 'M' + i, price: i }).data.medId);
+      ids.push(call({ action: 'add_medicine', adminKey: ADMIN_KEY, name: 'M' + i, price: i }).data.medId);
     }
     eq(new Set(ids).size, 25, '25 medicine ids are all distinct');
 
@@ -698,7 +698,7 @@ globalThis.runTests = function runTests() {
       shopName: 'Order Pharmacy', documents: docs, password: 'vendorpw1', password2: 'vendorpw1',
     }).data.merchantId;
     call({ action: 'verify_merchant', merchantId: mid, otp: H.lastOtp('shop@example.com') });
-    call({ action: 'review_merchant', adminKey: 'changeme-admin-key', merchantId: mid, status: 'APPROVED' });
+    call({ action: 'review_merchant', adminKey: ADMIN_KEY, merchantId: mid, status: 'APPROVED' });
     const med = call({
       action: 'add_medicine', merchantId: mid, password: 'vendorpw1',
       name: 'Vitamin C', price: 149, stock: 5,
@@ -714,7 +714,7 @@ globalThis.runTests = function runTests() {
       medicineId: med.data.medId, qty: 1, rxId: pending.data.rxId,
     }).success, 'pending prescription cannot be used for an order');
 
-    call({ action: 'update_status', adminKey: 'changeme-admin-key', rxId: pending.data.rxId, status: 'APPROVED' });
+    call({ action: 'update_status', adminKey: ADMIN_KEY, rxId: pending.data.rxId, status: 'APPROVED' });
     const placed = call({
       action: 'place_order', sessionToken: customer.sessionToken,
       medicineId: med.data.medId, qty: 2, rxId: pending.data.rxId,

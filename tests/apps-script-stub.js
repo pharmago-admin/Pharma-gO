@@ -150,11 +150,12 @@ function createStub() {
     fileNames() { return this.fileIds.map((id) => state.files.get(id).name); }
   }
 
-  // Pre-create the three prescription folders used by code.gs config plus root.
+  // Pre-create the Drive folders configured in code.gs plus root.
   const ROOT = new Folder('root', 'My Drive');
-  const PENDING = new Folder('16p5tyaPsSFrh5NckqXtlZouGkVI84xkY', 'Pending Rx');
-  const APPROVED = new Folder('1OYytV1yUiNEkk0lHqswijQUudtbuPx31', 'Approved Rx');
-  const DECLINED = new Folder('1A028GXtnT_nH0dXDwJS4NWmQNnQcoQ3X', 'Declined Rx');
+  const PENDING = new Folder('1kF3WC5GytedlY3_Qtzz5Hq4iwzAiHpul', 'Pending Rx');
+  const APPROVED = new Folder('17ltgph31bn2qdll3esDRvxT9LXstB3TQ', 'Approved Rx');
+  const DECLINED = new Folder('1EQhvrSVxtWRZbCqjrCX2M7kUCC4mH0f5', 'Declined Rx');
+  const MERCHANT_DOCS = new Folder('1InwS_7yCGWxrLZZC5Xa95sjm-TgGuolm', 'Merchant KYC Docs');
 
   const DriveApp = {
     Access: {
@@ -379,9 +380,14 @@ function createStub() {
       state.fetches.length = 0;
       state.fetchResponder = null;
       state.seq = 0;
-      // re-register the default folders
-      [ROOT, PENDING, APPROVED, DECLINED].forEach((f) => state.folders.set(f.id, f));
-      ROOT.fileIds = []; PENDING.fileIds = []; APPROVED.fileIds = []; DECLINED.fileIds = [];
+      // Re-register the configured folders.
+      [ROOT, PENDING, APPROVED, DECLINED, MERCHANT_DOCS]
+        .forEach((f) => state.folders.set(f.id, f));
+      ROOT.fileIds = [];
+      PENDING.fileIds = [];
+      APPROVED.fileIds = [];
+      DECLINED.fileIds = [];
+      MERCHANT_DOCS.fileIds = [];
       spreadsheet.sheetOrder = [];
     },
   };
