@@ -25,7 +25,7 @@ const ADMIN_KEY = '2026';
 // Social sign-in (optional). GOOGLE_CLIENT_ID is the OAuth client ID (Web) whose
 // audience is checked against Google tokens. Mirror the client ID in index.html.
 // It can be set as a Script Property instead of editing this file.
-const GOOGLE_CLIENT_ID = '247584661794-q088cqts3qo7lhth9556ql9urro744e8.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '644669603326-i5uuu2lfobqadgmggpnhticbeel4ioef.apps.googleusercontent.com';
 
 // Your GitHub Pages URL — emailed "set password" links redirect here.
 // Leave blank to serve the set-password form straight from Apps Script
