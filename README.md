@@ -17,8 +17,8 @@ Static frontend (`index.html`, GitHub Pages) + Google Apps Script backend (`code
 1. **Spreadsheet** — create one, copy its ID from the URL, set it as `SHEET_ID` in `code.gs`
    (or as a Script Property — see [Configuration](#configuration)).
 2. **Drive folders** — create three folders for prescriptions (pending / approved / declined) and
-   paste their IDs into `PENDING_FOLDER_ID`, `APPROVED_FOLDER_ID`, `DECLINED_FOLDER_ID`.
-   The vendor KYC folder is optional — leave it blank and the script creates one on first use.
+   paste their IDs into `PENDING_FOLDER_ID`, `APPROVED_FOLDER_ID`, `DECLINED_FOLDER_ID`, and
+   `MERCHANT_DOCS_FOLDER_ID` (or set them as Script Properties).
 3. **Apps Script** — *Extensions → Apps Script*, paste `code.gs`, then
    **Deploy → New deployment → Web app**
    *Execute as: **Me*** · *Who has access: **Anyone*** → copy the `/exec` URL.
@@ -44,8 +44,8 @@ which overrides the constant in `code.gs` — handy for keeping secrets out of G
 |---|---|---|
 | `SHEET_ID` | *(in file)* | Target spreadsheet |
 | `PENDING_FOLDER_ID` / `APPROVED_FOLDER_ID` / `DECLINED_FOLDER_ID` | *(in file)* | Prescription folders |
-| `MERCHANT_DOCS_FOLDER_ID` | blank → auto-create `PharmaGo — Merchant KYC Docs` | Vendor documents |
-| `ADMIN_KEY` | `changeme-admin-key` | **Change this.** Unlocks admin actions |
+| `MERCHANT_DOCS_FOLDER_ID` | *(in file)* | Vendor-document folder |
+| `ADMIN_KEY` | `2026` | **Change this.** Unlocks admin actions |
 | `ADMIN_GOOGLE_DOMAIN` | blank | Optional hardening: privileged requests must also come from a Google account in this domain (see note below) |
 | `FRONTEND_URL` | blank → Apps-Script-hosted set-password page | Emailed link target |
 | `GOOGLE_CLIENT_ID` | `247584661794-q088cqts3qo7lhth9556ql9urro744e8.apps.googleusercontent.com` | OAuth client ID (Web) whose audience is checked against Google sign-in tokens |

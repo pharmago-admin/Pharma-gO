@@ -4,7 +4,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { JSDOM } = require('jsdom');
-const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
+// Exercise the fallback messaging without loading the external Google SDK.
+const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8')
+  .replace(/const GOOGLE_CLIENT_ID = "[^"]*";/,
+    'const GOOGLE_CLIENT_ID = "";');
 let checks = 0;
 function check(value, label) {
   checks++;
@@ -301,7 +304,7 @@ async function run() {
     check(id('login').classList.contains('active'), 'continue opens destination page');
     check(id('viewLogin').style.display !== 'none', 'continue opens sign-in form');
   } finally { dom.window.close(); }
-  if (checks !== 127) throw Error('Expected 127 UI-state checks, got ' + checks);
-  console.log('✓ 127 UI-state checks passed');
+  if (checks !== 128) throw Error('Expected 128 UI-state checks, got ' + checks);
+  console.log('✓ 128 UI-state checks passed');
 }
 run().catch(err => { console.error('✗ ' + err.stack); process.exitCode = 1; });

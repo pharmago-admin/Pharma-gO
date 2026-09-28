@@ -9,6 +9,8 @@ const vm = require('node:vm');
 const { createStub } = require('../tests/apps-script-stub');
 
 const stub = createStub();
+// Keep the publicly documented demo key separate from the deployment default.
+stub.state.props.ADMIN_KEY = 'changeme-admin-key';
 const ctx = vm.createContext({
   console, ...Object.fromEntries(['SpreadsheetApp', 'DriveApp', 'MailApp', 'Utilities',
     'PropertiesService', 'ScriptApp', 'HtmlService', 'ContentService', 'Session',

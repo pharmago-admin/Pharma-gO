@@ -8,17 +8,15 @@
 // --- CONFIGURATION -------------------------------------------------------
 // Any value below can be overridden without editing code: set a matching
 // Script Property (Project Settings → Script Properties), e.g. ADMIN_KEY.
-const SHEET_ID = '1KH4PvzLiSewlYU4_mKw_PjHNGViSLRCYGvptvs-RO1k';
+const SHEET_ID = '1qycWqihBSd-DN5Mn1YSFeHaxQLgYAIiYTze-4wgGMOU';
 
 // Prescription folders (upload flow)
-const PENDING_FOLDER_ID  = '16p5tyaPsSFrh5NckqXtlZouGkVI84xkY'; // uploads land here
-const APPROVED_FOLDER_ID = '1OYytV1yUiNEkk0lHqswijQUudtbuPx31'; // approved Rx moved here
-const DECLINED_FOLDER_ID = '1A028GXtnT_nH0dXDwJS4NWmQNnQcoQ3X'; // declined Rx moved here
+const PENDING_FOLDER_ID  = '1kF3WC5GytedlY3_Qtzz5Hq4iwzAiHpul'; // uploads land here
+const APPROVED_FOLDER_ID = '17ltgph31bn2qdll3esDRvxT9LXstB3TQ'; // approved Rx moved here
+const DECLINED_FOLDER_ID = '1EQhvrSVxtWRZbCqjrCX2M7kUCC4mH0f5'; // declined Rx moved here
 
 // Merchant document folder (GST, Drug License, Shop ID, PAN).
-// Leave blank (or the REPLACE_... placeholder) to have the script create and
-// reuse a folder automatically — see merchantDocsFolder_().
-const MERCHANT_DOCS_FOLDER_ID = '';
+const MERCHANT_DOCS_FOLDER_ID = '1InwS_7yCGWxrLZZC5Xa95sjm-TgGuolm';
 const MERCHANT_DOCS_FOLDER_NAME = 'PharmaGo — Merchant KYC Docs';
 
 // Simple shared secret for admin actions (change this! Script Property wins)
